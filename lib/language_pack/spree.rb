@@ -10,7 +10,6 @@ class LanguagePack::Spree < LanguagePack::Rails6
   def compile
     run_command 'git init -q'
     run_command "gem install --user-install --no-ri --no-rdoc railties"
-    binding.pry
     run_command "gem install rails -v 6.0.0"
     # if Gem.loaded_specs["railties"].version.to_s == "6.1.0"
     run_command 'gem install --user-install --no-ri --no-rdoc bundler'
