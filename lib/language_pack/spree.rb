@@ -9,11 +9,13 @@ class LanguagePack::Spree < LanguagePack::Rails6
 
   def compile
     run_command 'git init -q'
-    run_command "gem install --user-install --no-ri --no-rdoc railties #{'-v 6.0.3.4' if bundler.gem_version('railties') >= Gem::Version.new('6.x')}"
+    run_command "gem install --user-install --no-ri --no-rdoc railties"
+    run_command "gem install rails -v 6.0.0" if Gem.loaded_specs["railties"].version.to_s == "6.1.0"
     run_command 'gem install --user-install --no-ri --no-rdoc bundler'
 
     rails_path = `ruby -e "gem 'railties'; puts Gem.bin_path('railties', 'rails')"`.strip
-    run_command "#{rails_path} new sandbox --skip-bundle --database=postgresql --skip-javascript --skip-coffee"
+    specific_version = "_6.0.0_" if Gem.loaded_specs["railties"].version.to_s == "6.1.0"
+    run_command "#{rails_path} #{specific_version} new sandbox --skip-bundle --database=postgresql --skip-javascript --skip-coffee"
 
     run_command "cp -rf sandbox/* ."
     run_command "rm -rf sandbox"
